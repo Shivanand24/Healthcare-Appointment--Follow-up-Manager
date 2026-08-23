@@ -298,26 +298,6 @@ REDIS_URL=redis://...           ← Upstash (optional, in-process fallback works
 SMTP_HOST=smtp.gmail.com
 SMTP_USER=your@gmail.com
 SMTP_PASS=your-app-password
-```
-
----
-
-## 📋 Deliverables Checklist
-
-- [x] Complete source code with modular folder structure
-- [x] `schema.prisma` with all 7 entities + relations + constraints
-- [x] `prisma/seed.ts` with admin, 3 doctors, 2 patients, sample appointments
-- [x] All API routes with Zod input validation
-- [x] Gemini AI integration with 5s timeout + graceful fallback
-- [x] BullMQ/Redis async queue with exponential backoff retry
-- [x] Atomic double-booking prevention (DB unique constraint + P2002 handler)
-- [x] Doctor leave management with atomic bulk cancellation
-- [x] Patient portal (search, slot grid, symptom form, appointments, prescriptions)
-- [x] Doctor portal (daily schedule, AI urgency badges, consultation form)
-- [x] Admin portal (onboarding wizard, leave manager, audit logs)
-- [x] NextAuth.js RBAC middleware protecting all portal routes
-- [x] `.env.example` with all required variable descriptions
-- [x] Comprehensive `README.md` with setup, API docs, system design
 
 ---
 
