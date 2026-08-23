@@ -1,6 +1,7 @@
 import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
+  serverExternalPackages: ['bullmq', '@valkey/valkey-glide'],
   eslint: {
     ignoreDuringBuilds: true,
   },
