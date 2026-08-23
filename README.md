@@ -1,4 +1,4 @@
-**?? Live Application URL:** [https://healthcare-appointment-follow-up-ma-blond.vercel.app/](https://healthcare-appointment-follow-up-ma-blond.vercel.app/)
+**Live Application URL:** [https://healthcare-appointment-follow-up-ma-blond.vercel.app/](https://healthcare-appointment-follow-up-ma-blond.vercel.app/)
 
 # Healthcare Appointment & Follow-up Manager
 
