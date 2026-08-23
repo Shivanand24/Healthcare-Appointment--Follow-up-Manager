@@ -1,6 +1,6 @@
 import { google, calendar_v3 } from "googleapis";
 
-const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
+// const SCOPES = ["https://www.googleapis.com/auth/calendar.events"];
 
 /**
  * Initializes and returns an authenticated Google Calendar API client.
