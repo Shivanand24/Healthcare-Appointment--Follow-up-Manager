@@ -303,3 +303,4 @@ SMTP_PASS=your-app-password
 
 *Built with Next.js 15 · Prisma ORM · NextAuth.js · Google Gemini AI · BullMQ · Tailwind CSS*
 
+
