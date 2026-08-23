@@ -1,0 +1,199 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ──────────────────────────────────────────────
+// ENUMS
+// ──────────────────────────────────────────────
+
+enum Role {
+  PATIENT
+  DOCTOR
+  ADMIN
+}
+
+enum AppointmentStatus {
+  HELD
+  CONFIRMED
+  COMPLETED
+  CANCELLED_BY_PATIENT
+  CANCELLED_BY_DOCTOR
+}
+
+enum UrgencyLevel {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum LeaveStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum NotificationChannel {
+  EMAIL
+  CALENDAR
+  SMS
+}
+
+enum NotificationStatus {
+  QUEUED
+  SENT
+  FAILED
+  DEAD_LETTER
+}
+
+// ──────────────────────────────────────────────
+// USER
+// ──────────────────────────────────────────────
+
+model User {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  passwordHash String
+  role         Role     @default(PATIENT)
+  name         String
+  phone        String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  doctorProfile   DoctorProfile?
+  appointmentsAsPatient Appointment[] @relation("PatientAppointments")
+
+  @@map("users")
+}
+
+// ──────────────────────────────────────────────
+// DOCTOR PROFILE
+// ──────────────────────────────────────────────
+
+model DoctorProfile {
+  id                  String  @id @default(cuid())
+  userId              String  @unique
+  specialization      String
+  slotDurationMinutes Int     @default(30)
+  workingHoursStart   String  // "09:00"
+  workingHoursEnd     String  // "17:00"
+  dailyCapacity       Int     @default(16)
+  bio                 String?
+  consultationFee     Float?
+
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments Appointment[] @relation("DoctorAppointments")
+  leaves       DoctorLeave[]
+
+  @@map("doctor_profiles")
+}
+
+// ──────────────────────────────────────────────
+// DOCTOR LEAVE
+// ──────────────────────────────────────────────
+
+model DoctorLeave {
+  id        String      @id @default(cuid())
+  doctorId  String
+  leaveDate DateTime
+  reason    String?
+  status    LeaveStatus @default(APPROVED)
+  createdAt DateTime    @default(now())
+
+  doctor DoctorProfile @relation(fields: [doctorId], references: [id], onDelete: Cascade)
+
+  @@map("doctor_leaves")
+}
+
+// ──────────────────────────────────────────────
+// APPOINTMENT
+// ──────────────────────────────────────────────
+
+model Appointment {
+  id              String            @id @default(cuid())
+  patientId       String
+  doctorId        String
+  appointmentDate DateTime
+  startTime       String            // "10:00"
+  endTime         String            // "10:30"
+  status          AppointmentStatus @default(HELD)
+  holdExpiresAt   DateTime?
+  notes           String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+
+  patient          User              @relation("PatientAppointments", fields: [patientId], references: [id])
+  doctor           DoctorProfile     @relation("DoctorAppointments", fields: [doctorId], references: [id])
+  preVisitSummary  PreVisitSummary?
+  postVisitRecord  PostVisitRecord?
+  notifications    NotificationAudit[]
+
+  // Unique constraint: one active/held slot per doctor per day per time
+  @@unique([doctorId, appointmentDate, startTime], name: "unique_active_slot")
+  @@map("appointments")
+}
+
+// ──────────────────────────────────────────────
+// PRE-VISIT SUMMARY (LLM Triage)
+// ──────────────────────────────────────────────
+
+model PreVisitSummary {
+  id                 String       @id @default(cuid())
+  appointmentId      String       @unique
+  rawSymptoms        String
+  urgencyLevel       UrgencyLevel @default(LOW)
+  chiefComplaint     String?
+  suggestedQuestions Json?        // String[]
+  rawFallbackFlag    Boolean      @default(false)
+  createdAt          DateTime     @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@map("pre_visit_summaries")
+}
+
+// ──────────────────────────────────────────────
+// POST-VISIT RECORD
+// ──────────────────────────────────────────────
+
+model PostVisitRecord {
+  id                  String   @id @default(cuid())
+  appointmentId       String   @unique
+  doctorNotes         String
+  plainSummary        String?
+  prescriptionDetails Json?    // [{ name, dosage, frequency, duration }]
+  followUpDate        DateTime?
+  createdAt           DateTime @default(now())
+
+  appointment Appointment @relation(fields: [appointmentId], references: [id], onDelete: Cascade)
+
+  @@map("post_visit_records")
+}
+
+// ──────────────────────────────────────────────
+// NOTIFICATION AUDIT
+// ──────────────────────────────────────────────
+
+model NotificationAudit {
+  id            String              @id @default(cuid())
+  appointmentId String?
+  type          String              // "BOOKING_CONFIRMATION" | "CANCELLATION" | "REMINDER" | "CALENDAR_SYNC"
+  channel       NotificationChannel @default(EMAIL)
+  status        NotificationStatus  @default(QUEUED)
+  retryCount    Int                 @default(0)
+  errorLog      String?
+  scheduledFor  DateTime?
+  sentAt        DateTime?
+  createdAt     DateTime            @default(now())
+
+  appointment Appointment? @relation(fields: [appointmentId], references: [id], onDelete: SetNull)
+
+  @@map("notification_audits")
+}

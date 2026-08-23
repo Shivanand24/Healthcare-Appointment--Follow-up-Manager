@@ -1,0 +1,194 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── CSS Variables ──────────────────────────────────────────────────────── */
+:root {
+  --color-brand: #0ea5e9;
+  --color-brand-dark: #0284c7;
+  --color-surface: #0f172a;
+  --color-surface-elevated: #1e293b;
+  --color-border: rgba(148, 163, 184, 0.1);
+  --gradient-brand: linear-gradient(135deg, #0ea5e9 0%, #6366f1 100%);
+  --gradient-hero: radial-gradient(ellipse at top, #0c4a6e22 0%, transparent 60%),
+    radial-gradient(ellipse at bottom right, #6366f118 0%, transparent 60%);
+}
+
+/* ─── Base ───────────────────────────────────────────────────────────────── */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #020617;
+  color: #f1f5f9;
+  font-family: var(--font-inter), system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── Scrollbar ──────────────────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #0f172a;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #475569;
+}
+
+/* ─── Glassmorphism ──────────────────────────────────────────────────────── */
+.glass {
+  background: rgba(30, 41, 59, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(148, 163, 184, 0.1);
+}
+
+.glass-light {
+  background: rgba(15, 23, 42, 0.8);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(148, 163, 184, 0.08);
+}
+
+/* ─── Gradient Text ──────────────────────────────────────────────────────── */
+.gradient-text {
+  background: var(--gradient-brand);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── Gradient Border Card ───────────────────────────────────────────────── */
+.gradient-border {
+  position: relative;
+  background: #1e293b;
+  border-radius: 12px;
+}
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, #0ea5e930, #6366f130);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* ─── Button Base ────────────────────────────────────────────────────────── */
+.btn-primary {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+    bg-brand-500 hover:bg-brand-600 text-white
+    transition-all duration-200 
+    focus:outline-none focus:ring-2 focus:ring-brand-500 focus:ring-offset-2 focus:ring-offset-surface-950
+    disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+    bg-surface-800 hover:bg-surface-800/80 text-slate-200 border border-slate-700
+    transition-all duration-200
+    focus:outline-none focus:ring-2 focus:ring-slate-500 focus:ring-offset-2 focus:ring-offset-surface-950
+    disabled:opacity-50 disabled:cursor-not-allowed;
+}
+
+.btn-danger {
+  @apply inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-semibold text-sm
+    bg-red-500/20 hover:bg-red-500/30 text-red-400 border border-red-500/30
+    transition-all duration-200;
+}
+
+/* ─── Input Base ─────────────────────────────────────────────────────────── */
+.input-base {
+  @apply w-full px-4 py-2.5 rounded-xl bg-surface-800 border border-slate-700
+    text-slate-100 placeholder-slate-500
+    focus:outline-none focus:ring-2 focus:ring-brand-500 focus:border-transparent
+    transition-all duration-200;
+}
+
+/* ─── Card ───────────────────────────────────────────────────────────────── */
+.card {
+  @apply rounded-2xl bg-surface-900 border border-slate-800/60 p-6;
+}
+
+.card-hover {
+  @apply card transition-all duration-300 hover:border-brand-500/30 hover:shadow-lg hover:shadow-brand-500/5;
+}
+
+/* ─── Badge ──────────────────────────────────────────────────────────────── */
+.badge {
+  @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold;
+}
+
+.badge-low    { @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20; }
+.badge-medium { @apply badge bg-amber-500/15 text-amber-400 border border-amber-500/20; }
+.badge-high   { @apply badge bg-red-500/15 text-red-400 border border-red-500/20; }
+.badge-confirmed { @apply badge bg-brand-500/15 text-brand-400 border border-brand-500/20; }
+.badge-completed { @apply badge bg-emerald-500/15 text-emerald-400 border border-emerald-500/20; }
+.badge-held      { @apply badge bg-amber-500/15 text-amber-400 border border-amber-500/20; }
+.badge-cancelled { @apply badge bg-red-500/15 text-red-400 border border-red-500/20; }
+
+/* ─── Animations ─────────────────────────────────────────────────────────── */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50%       { background-position: 100% 50%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-8px); }
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.4); }
+  70%  { box-shadow: 0 0 0 12px rgba(14, 165, 233, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0); }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.5s ease-out forwards; }
+.animate-float      { animation: float 3s ease-in-out infinite; }
+.animate-pulse-ring { animation: pulse-ring 2s ease-out infinite; }
+
+/* ─── Stagger animations ─────────────────────────────────────────────────── */
+.stagger-1 { animation-delay: 0.1s; opacity: 0; }
+.stagger-2 { animation-delay: 0.2s; opacity: 0; }
+.stagger-3 { animation-delay: 0.3s; opacity: 0; }
+.stagger-4 { animation-delay: 0.4s; opacity: 0; }
+
+/* ─── Slot Grid ──────────────────────────────────────────────────────────── */
+.slot-available {
+  @apply px-3 py-2 rounded-lg text-sm font-medium text-center cursor-pointer
+    bg-brand-500/10 text-brand-400 border border-brand-500/20
+    hover:bg-brand-500/20 hover:border-brand-500/40
+    transition-all duration-200;
+}
+.slot-unavailable {
+  @apply px-3 py-2 rounded-lg text-sm font-medium text-center cursor-not-allowed
+    bg-surface-800/30 text-slate-600 border border-slate-800/30;
+}
+.slot-selected {
+  @apply px-3 py-2 rounded-lg text-sm font-medium text-center cursor-pointer
+    bg-brand-500 text-white border border-brand-500
+    shadow-lg shadow-brand-500/30;
+}
