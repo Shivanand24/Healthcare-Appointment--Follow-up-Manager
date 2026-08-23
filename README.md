@@ -1,3 +1,5 @@
+**?? Live Application URL:** [https://healthcare-appointment-follow-up-ma-blond.vercel.app/](https://healthcare-appointment-follow-up-ma-blond.vercel.app/)
+
 # Healthcare Appointment & Follow-up Manager
 
 A **production-ready, full-stack healthcare appointment scheduling platform** built with Next.js 15, Prisma ORM, NextAuth.js, Google Gemini AI, Redis/BullMQ async queues, and Tailwind CSS.
@@ -320,3 +322,4 @@ SMTP_PASS=your-app-password
 ---
 
 *Built with Next.js 15 · Prisma ORM · NextAuth.js · Google Gemini AI · BullMQ · Tailwind CSS*
+
