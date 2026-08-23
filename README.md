@@ -301,6 +301,10 @@ SMTP_PASS=your-app-password
 
 ---
 
+screenshot :
+<img width="1919" height="896" alt="Screenshot 2026-08-24 024910" src="https://github.com/user-attachments/assets/edfa4eb4-eae1-48c9-8882-56679153665f" />
+
+
 *Built with Next.js 15 · Prisma ORM · NextAuth.js · Google Gemini AI · BullMQ · Tailwind CSS*
 
 
